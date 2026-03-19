@@ -28,9 +28,10 @@ API_KEY = "AKIAIOSFODNN7EXAMPLE"
 @app.route("/user")
 def get_user():
     uid = request.args.get("id", "")
-    query = "SELECT * FROM users WHERE id = " + uid
+    # Use parameterized query to prevent SQL injection
+    query = "SELECT * FROM users WHERE id = ?"
     cursor = db_connection.cursor()
-    cursor.execute(query)
+    cursor.execute(query, (uid,))
     return Response(str(cursor.fetchall()), mimetype="text/plain")
 
 
